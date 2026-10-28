@@ -1,1 +1,3 @@
-# autoparts-ecommerce
+node -v
+npm -v
+git --version
