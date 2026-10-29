@@ -13,6 +13,15 @@ function makeToken(user) {
   );
 }
 
+function publicUser(user) {
+  return {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+  };
+}
+
 // Register
 router.post("/register", async (req, res) => {
   try {
@@ -35,10 +44,7 @@ router.post("/register", async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashed });
 
-    res.status(201).json({
-      token: makeToken(user),
-      user: { id: user._id, name: user.name, email: user.email },
-    });
+    res.status(201).json({ token: makeToken(user), user: publicUser(user) });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -59,10 +65,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    res.json({
-      token: makeToken(user),
-      user: { id: user._id, name: user.name, email: user.email },
-    });
+    res.json({ token: makeToken(user), user: publicUser(user) });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

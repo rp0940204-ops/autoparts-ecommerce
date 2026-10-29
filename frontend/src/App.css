@@ -368,3 +368,92 @@ body {
   color: #4b5563;
   font-size: 15px;
 }
+
+.admin-btn {
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+.admin-modal {
+  width: 560px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.admin-form h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-actions .btn {
+  flex: 1;
+}
+
+.btn-light {
+  background: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-light:hover {
+  background: #e5e7eb;
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-danger:hover {
+  background: #fecaca;
+}
+
+.admin-list-title {
+  margin: 24px 0 8px;
+  font-size: 16px;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+}
+
+.admin-row-info span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.admin-row-buttons {
+  display: flex;
+  gap: 8px;
+}

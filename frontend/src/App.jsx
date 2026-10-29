@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import AuthForm from "./AuthForm";
 import Checkout from "./Checkout";
+import Admin from "./Admin";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -18,6 +19,7 @@ function App() {
   });
   const [showAuth, setShowAuth] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
   const [placedOrder, setPlacedOrder] = useState(null);
 
   function loadProducts() {
@@ -48,6 +50,7 @@ function App() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    setShowAdmin(false);
   }
 
   function addToCart(product) {
@@ -106,7 +109,15 @@ function App() {
         <div className="auth-bar">
           {user ? (
             <>
-              <span>Hi, {user.name}</span>
+              <span>{"Hi, " + user.name}</span>
+              {user.isAdmin && (
+                <button
+                  className="auth-btn admin-btn"
+                  onClick={() => setShowAdmin(true)}
+                >
+                  Admin
+                </button>
+              )}
               <button className="auth-btn" onClick={logout}>
                 Logout
               </button>
@@ -119,7 +130,7 @@ function App() {
         </div>
         <h1>AutoParts Store</h1>
         <p>Quality parts for your vehicle</p>
-        <div className="cart-badge">Cart: {totalItems} items</div>
+        <div className="cart-badge">{"Cart: " + totalItems + " items"}</div>
       </header>
 
       {showAuth && (
@@ -138,6 +149,14 @@ function App() {
         />
       )}
 
+      {showAdmin && user && user.isAdmin && (
+        <Admin
+          products={products}
+          onChanged={loadProducts}
+          onClose={() => setShowAdmin(false)}
+        />
+      )}
+
       {placedOrder && (
         <div className="modal-back">
           <div className="modal">
@@ -149,10 +168,10 @@ function App() {
             </button>
             <h2>Order placed!</h2>
             <p className="success-text">
-              Thank you. Your order total is ₹{placedOrder.totalPrice}.
+              {"Thank you. Your order total is Rs. " + placedOrder.totalPrice}
             </p>
             <p className="success-text">
-              Order ID: {placedOrder._id.slice(-8)}
+              {"Order ID: " + placedOrder._id.slice(-8)}
             </p>
             <button className="btn full" onClick={() => setPlacedOrder(null)}>
               Continue shopping
@@ -170,7 +189,7 @@ function App() {
               <p className="brand">{p.brand}</p>
               <p className="description">{p.description}</p>
               <div className="bottom">
-                <span className="price">₹{p.price}</span>
+                <span className="price">{"Rs. " + p.price}</span>
                 <span className="stock">
                   {p.stock > 0 ? p.stock + " in stock" : "Out of stock"}
                 </span>
@@ -193,7 +212,7 @@ function App() {
             <div className="cart-item" key={item._id}>
               <div className="cart-info">
                 <strong>{item.name}</strong>
-                <span>₹{item.price} each</span>
+                <span>{"Rs. " + item.price + " each"}</span>
               </div>
               <div className="cart-controls">
                 <button onClick={() => changeQty(item._id, -1)}>-</button>
@@ -207,7 +226,7 @@ function App() {
           ))}
           {cart.length > 0 && (
             <>
-              <div className="total">Total: ₹{totalPrice}</div>
+              <div className="total">{"Total: Rs. " + totalPrice}</div>
               <button className="btn full" onClick={startCheckout}>
                 Checkout
               </button>
