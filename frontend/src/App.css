@@ -457,3 +457,7 @@ body {
   display: flex;
   gap: 8px;
 }
+
+.cart h2 {
+  color: #1f2937;
+}
