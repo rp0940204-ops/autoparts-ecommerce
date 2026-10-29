@@ -249,3 +249,122 @@ body {
 .cart-info strong {
   color: #1f2937;
 }
+
+.header {
+  position: relative;
+}
+
+.auth-bar {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.auth-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid #6b7280;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.auth-btn:hover {
+  background: #1f2937;
+}
+
+.modal-back {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  position: relative;
+  background: white;
+  color: #1f2937;
+  width: 340px;
+  max-width: 90%;
+  padding: 28px;
+  border-radius: 14px;
+}
+
+.modal h2 {
+  margin: 0 0 18px;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal input {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1f2937;
+  background: white;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.switch {
+  margin: 16px 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: #4b5563;
+}
+
+.switch span {
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.btn.full {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.pay-note {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.checkout-total {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #059669;
+}
+
+.success-text {
+  margin: 0 0 8px;
+  color: #4b5563;
+  font-size: 15px;
+}

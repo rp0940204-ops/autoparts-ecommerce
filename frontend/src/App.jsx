@@ -1,13 +1,26 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import AuthForm from "./AuthForm";
+import Checkout from "./Checkout";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem("user");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [showAuth, setShowAuth] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [placedOrder, setPlacedOrder] = useState(null);
 
-  useEffect(() => {
+  function loadProducts() {
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => {
@@ -18,7 +31,24 @@ function App() {
         setError("Could not load products");
         setLoading(false);
       });
+  }
+
+  useEffect(() => {
+    loadProducts();
   }, []);
+
+  function handleAuthSuccess(data) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    setUser(data.user);
+    setShowAuth(false);
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  }
 
   function addToCart(product) {
     setCart((current) => {
@@ -49,6 +79,21 @@ function App() {
     setCart((current) => current.filter((item) => item._id !== id));
   }
 
+  function startCheckout() {
+    if (!user) {
+      setShowAuth(true);
+    } else {
+      setShowCheckout(true);
+    }
+  }
+
+  function handleOrderPlaced(order) {
+    setShowCheckout(false);
+    setCart([]);
+    setPlacedOrder(order);
+    loadProducts();
+  }
+
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
   const totalPrice = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
 
@@ -58,10 +103,63 @@ function App() {
   return (
     <div className="page">
       <header className="header">
+        <div className="auth-bar">
+          {user ? (
+            <>
+              <span>Hi, {user.name}</span>
+              <button className="auth-btn" onClick={logout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <button className="auth-btn" onClick={() => setShowAuth(true)}>
+              Login / Register
+            </button>
+          )}
+        </div>
         <h1>AutoParts Store</h1>
         <p>Quality parts for your vehicle</p>
         <div className="cart-badge">Cart: {totalItems} items</div>
       </header>
+
+      {showAuth && (
+        <AuthForm
+          onSuccess={handleAuthSuccess}
+          onClose={() => setShowAuth(false)}
+        />
+      )}
+
+      {showCheckout && (
+        <Checkout
+          cart={cart}
+          total={totalPrice}
+          onClose={() => setShowCheckout(false)}
+          onOrderPlaced={handleOrderPlaced}
+        />
+      )}
+
+      {placedOrder && (
+        <div className="modal-back">
+          <div className="modal">
+            <button
+              className="modal-close"
+              onClick={() => setPlacedOrder(null)}
+            >
+              x
+            </button>
+            <h2>Order placed!</h2>
+            <p className="success-text">
+              Thank you. Your order total is ₹{placedOrder.totalPrice}.
+            </p>
+            <p className="success-text">
+              Order ID: {placedOrder._id.slice(-8)}
+            </p>
+            <button className="btn full" onClick={() => setPlacedOrder(null)}>
+              Continue shopping
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="layout">
         <div className="grid">
@@ -108,7 +206,12 @@ function App() {
             </div>
           ))}
           {cart.length > 0 && (
-            <div className="total">Total: ₹{totalPrice}</div>
+            <>
+              <div className="total">Total: ₹{totalPrice}</div>
+              <button className="btn full" onClick={startCheckout}>
+                Checkout
+              </button>
+            </>
           )}
         </aside>
       </div>
